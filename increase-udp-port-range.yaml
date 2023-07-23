@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: increase-udp-port-range
+  labels:
+    app: increase-udp-port-range
+spec:
+  selector:
+    matchLabels:
+      name: increase-udp-port-range
+  template:
+    metadata:
+      labels:
+        name: increase-udp-port-range
+    spec:
+      securityContext:
+        windowsOptions:
+          hostProcess: true
+          runAsUserName: "NT AUTHORITY\\SYSTEM"
+      # Node-critical pod - evict other pods if needed to always run on the node.
+      priorityClassName: system-node-critical
+      hostNetwork: true
+      containers:
+      - name: increase-udp-port-range
+        image: mcr.microsoft.com/windows/servercore:ltsc2022
+        args:
+        - powershell.exe
+        - -Command
+        - "netsh int ipv4 set dynamicportrange UDP 33000 32329; while($true){Start-Sleep 10000}"
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - name: kube-path
+            mountPath: C:\k
+      volumes:
+      - name: kube-path
+        hostPath:
+          path: C:\k
+      nodeSelector:
+        kubernetes.azure.com/os-sku: Windows2022

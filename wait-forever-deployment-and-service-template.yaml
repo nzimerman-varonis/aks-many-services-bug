@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wait-forever-{{UUID}}
+  labels:
+    app: wait-forever-{{UUID}}
+    group: wait-forever
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wait-forever-{{UUID}}
+  template:
+    metadata:
+      labels:
+        app: wait-forever-{{UUID}}
+        group: wait-forever
+    spec:
+      nodeSelector:
+        kubernetes.io/os: windows
+        kubernetes.azure.com/os-sku: Windows2022
+      enableServiceLinks: false
+      containers:
+      - name: wait-forever
+        #image: mcr.microsoft.com/dotnet/aspnet:6.0.10-nanoserver-ltsc2022
+        image: mcr.microsoft.com/windows/servercore:ltsc2022
+        command: [ "cmd", "/c", "ping -t localhost > NUL" ]  # Wait forever
+        ports:
+        - name: main
+          containerPort: 80
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 10m
+            memory: 40Mi
+          limits:
+            cpu: 500m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wait-forever-{{UUID}}
+  labels:
+    app: wait-forever-{{UUID}}
+    group: wait-forever
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: main
+  selector:
+    app: wait-forever-{{UUID}}
