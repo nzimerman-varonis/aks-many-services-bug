@@ -31,10 +31,10 @@ spec:
           protocol: TCP
         resources:
           requests:
-            cpu: 10m
-            memory: 40Mi
+            cpu: 40m
+            memory: 128Mi
           limits:
-            cpu: 500m
+            cpu: 40m
             memory: 128Mi
 ---
 apiVersion: v1
