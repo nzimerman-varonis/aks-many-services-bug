@@ -12,6 +12,9 @@ LOCATION="eastus"
 
 PODS_PER_NODE=135
 
+# If left empty, a random password is created.
+WINDOWS_ADMIN_PASSWORD=""
+
 KUBECTL="kubectl"
 
 
