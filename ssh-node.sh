@@ -8,7 +8,7 @@ if [ "$NODE_IP" == "" ] ; then
 fi
 
 # Get one of the Linux nodes
-LINUX_NODE=$(kubectl get nodes | grep lin | head -1 | gawk '{ print $1 }')
+LINUX_NODE=$(kubectl get nodes | grep system | head -1 | gawk '{ print $1 }')
 
 # Start a debug pod on the Linux node, without attaching to it
 DEBUG_POD=$(kubectl debug node/$LINUX_NODE -ti --attach=false --image=alpine | gawk '{ print $4 }')

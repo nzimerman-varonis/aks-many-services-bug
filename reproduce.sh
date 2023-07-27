@@ -52,4 +52,5 @@ $KUBECTL rollout status -w -f increase-udp-port-range.yaml
 
 ### Create deployments and services
 
-apply_yaml_templates 3000 "${APP_NAME}-deployment-and-service-template.yaml"
+YAML_TEMPLATE="${APP_NAME}-${OS}-deployment-and-service-template.yaml"
+apply_yaml_templates 3000 $YAML_TEMPLATE

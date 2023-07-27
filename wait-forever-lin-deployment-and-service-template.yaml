@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wait-forever-{{UUID}}
+  labels:
+    app: wait-forever-{{UUID}}
+    group: wait-forever
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wait-forever-{{UUID}}
+  template:
+    metadata:
+      labels:
+        app: wait-forever-{{UUID}}
+        group: wait-forever
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+        kubernetes.azure.com/os-sku: Ubuntu
+        kubernetes.azure.com/mode: user 
+      enableServiceLinks: false
+      containers:
+      - name: wait-forever
+        image: ubuntu:22.04
+        command: [ "/bin/sh", "-c", "sleep infinity" ]  # Wait forever
+        ports:
+        - name: main
+          containerPort: 80
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 40m
+            memory: 128Mi
+          limits:
+            cpu: 40m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wait-forever-{{UUID}}
+  labels:
+    app: wait-forever-{{UUID}}
+    group: wait-forever
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: main
+  selector:
+    app: wait-forever-{{UUID}}
