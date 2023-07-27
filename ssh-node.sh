@@ -2,10 +2,10 @@
 
 set -ex
 
-NODE_IP=$1
+NODE_NAME=$1
 
-if [ "$NODE_IP" == "" ] ; then
-    echo "Node IP must be specified!"
+if [ "$NODE_NAME" == "" ] ; then
+    echo "Node name must be specified!"
     exit
 fi
 
@@ -20,6 +20,9 @@ kubectl wait pod $DEBUG_POD --for condition=Ready --timeout=10s
 
 # Install openssh and sshpass in the debug pod
 kubectl exec -ti $DEBUG_POD -- /bin/sh -c "apk update && apk add openssh sshpass"
+
+# Get target node IP from node name
+NODE_IP=$(kubectl get node $NODE_NAME -o jsonpath="{.status.addresses[0].address}")
 
 # SSH into a Windows node, using password from file
 kubectl exec -ti $DEBUG_POD -- sshpass -p $(cat windows-password.txt) ssh azureuser@${NODE_IP} -o StrictHostKeyChecking=no
