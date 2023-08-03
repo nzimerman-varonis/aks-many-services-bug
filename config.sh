@@ -10,6 +10,9 @@ RESOURCE_GROUP="aks-many-services-bug-$USER-rg"
 CLUSTER_NAME="aks-many-services-bug-$USER"
 LOCATION="eastus"
 
+AKS_TIER="free"
+#AKS_TIER="standard"
+
 PODS_PER_NODE=135
 
 # If left empty, a random password is created.

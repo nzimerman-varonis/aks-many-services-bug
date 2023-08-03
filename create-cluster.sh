@@ -25,7 +25,8 @@ az aks create \
     --zones 1 2 3 \
     --nodepool-name system \
     --enable-encryption-at-host \
-    --enable-fips-image
+    --enable-fips-image \
+    --tier $AKS_TIER
 
 ./create-nodepool.sh
 
