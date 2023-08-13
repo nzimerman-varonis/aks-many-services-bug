@@ -23,6 +23,10 @@ OS="win"
 
 KUBECTL="kubectl"
 
+# Configure kubectl to skip verifying TLS certificates for the cluster
+# Needed when running behind TLS inspecting proxy
+INSECURE_SKIP_TLS_VERIFY="true"
+
 
 ### Don't change below this line ###
 

@@ -39,3 +39,8 @@ az aks show \
     $SUBSCRIPTION_PARAM \
     --name $CLUSTER_NAME \
     --resource-group $RESOURCE_GROUP
+
+if [ "$INSECURE_SKIP_TLS_VERIFY" == "true" ] ; then
+    # Disable kubectl certificate checks for this cluster
+    $KUBECTL config set-cluster $CLUSTER_NAME --insecure-skip-tls-verify=true
+fi
