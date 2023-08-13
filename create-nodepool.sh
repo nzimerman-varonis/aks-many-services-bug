@@ -28,7 +28,7 @@ az aks nodepool add \
     --node-vm-size=Standard_D8d_v5 \
     --mode User \
     --min-count 1 \
-    --max-count 30 \
+    --max-count 40 \
     --enable-cluster-autoscaler \
     --zones 1 2 3 \
     --enable-encryption-at-host \
