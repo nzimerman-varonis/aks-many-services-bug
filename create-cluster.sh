@@ -6,7 +6,25 @@ source config.sh
 
 # Generate random password for Windows nodes, and put it in a file.
 if [ "$WINDOWS_ADMIN_PASSWORD" == "" ] ; then
-    WINDOWS_ADMIN_PASSWORD=$(cat /dev/urandom | tr --delete --complement A-Za-z0-9 | head -c 20)
+
+    PASSWORD_LENGTH=20
+
+    # Generate password that matches Azure password complexity rules -
+    # must have at least one uppercase, one lowercase and one digit.
+    while true ; do
+        WINDOWS_ADMIN_PASSWORD=$(cat /dev/urandom | tr --delete --complement A-Za-z0-9 | head -c $PASSWORD_LENGTH)
+
+        PASSWORD_UPPERCASE_CHARS=$(echo $WINDOWS_ADMIN_PASSWORD | tr --delete --complement A-Z)
+        PASSWORD_LOWERCASE_CHARS=$(echo $WINDOWS_ADMIN_PASSWORD | tr --delete --complement a-z)
+        PASSWORD_DIGITS_CHARS=$(echo $WINDOWS_ADMIN_PASSWORD    | tr --delete --complement 0-9)
+
+        if [[ ( ${#PASSWORD_UPPERCASE_CHARS} != 0 ) &&
+              ( ${#PASSWORD_LOWERCASE_CHARS} != 0 ) &&
+              ( ${#PASSWORD_DIGITS_CHARS}    != 0 ) ]] ; then
+            break
+        fi
+    done
+    
     echo $WINDOWS_ADMIN_PASSWORD > windows-password.txt
 fi
 
