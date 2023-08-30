@@ -13,6 +13,10 @@ LOCATION="eastus"
 AKS_TIER="free"
 #AKS_TIER="standard"
 
+# Network plugin mode can be "overlay" for Azure CNI Overlay or left empty for standard Azure CNI.
+NETWORK_PLUGIN_MODE="overlay"
+#NETWORK_PLUGIN_MODE=""
+
 PODS_PER_NODE=135
 
 # If left empty, a random password is created.
@@ -23,8 +27,8 @@ OS="win"
 
 KUBECTL="kubectl"
 
-# Configure kubectl to skip verifying TLS certificates for the cluster
-# Needed when running behind TLS inspecting proxy
+# Configure kubectl to skip verifying TLS certificates for the cluster.
+# Needed when running behind TLS inspecting proxy.
 INSECURE_SKIP_TLS_VERIFY="true"
 
 

@@ -24,8 +24,20 @@ if [ "$WINDOWS_ADMIN_PASSWORD" == "" ] ; then
             break
         fi
     done
-    
+
     echo $WINDOWS_ADMIN_PASSWORD > windows-password.txt
+fi
+
+# Configure overlay network plugin mode if requested.
+if [ "$NETWORK_PLUGIN_MODE" == "overlay" ] ; then
+    NETWORK_PLUGIN_MODE_PARAMS="
+        --network-plugin-mode overlay
+        --pod-cidr 192.168.0.0/16"
+elif [ "$NETWORK_PLUGIN_MODE" == "" ] ; then
+    NETWORK_PLUGIN_MODE_PARAMS=""
+else
+    echo "Unknown network plugin mode '${NETWORK_PLUGIN_MODE}'!"
+    exit
 fi
 
 az aks create \
@@ -34,9 +46,7 @@ az aks create \
     --resource-group $RESOURCE_GROUP \
     --location $LOCATION \
     --network-plugin azure \
-    --network-plugin-mode overlay \
     --network-policy azure \
-    --pod-cidr 192.168.0.0/16 \
     --generate-ssh-keys \
     --windows-admin-username azureuser \
     --windows-admin-password $WINDOWS_ADMIN_PASSWORD \
@@ -44,7 +54,8 @@ az aks create \
     --nodepool-name system \
     --enable-encryption-at-host \
     --enable-fips-image \
-    --tier $AKS_TIER
+    --tier $AKS_TIER \
+    $NETWORK_PLUGIN_MODE_PARAMS
 
 ./create-nodepool.sh
 
