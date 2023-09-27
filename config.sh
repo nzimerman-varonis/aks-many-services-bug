@@ -14,8 +14,12 @@ AKS_TIER="free"
 #AKS_TIER="standard"
 
 # Network plugin mode can be "overlay" for Azure CNI Overlay or left empty for standard Azure CNI.
-NETWORK_PLUGIN_MODE="overlay"
-#NETWORK_PLUGIN_MODE=""
+#NETWORK_PLUGIN_MODE="overlay"
+NETWORK_PLUGIN_MODE=""
+
+# Network policy can be "azure" or "calico".
+NETWORK_POLICY="azure"
+#NETWORK_POLICY="calico"
 
 PODS_PER_NODE=135
 

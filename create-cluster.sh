@@ -46,7 +46,7 @@ az aks create \
     --resource-group $RESOURCE_GROUP \
     --location $LOCATION \
     --network-plugin azure \
-    --network-policy azure \
+    --network-policy $NETWORK_POLICY \
     --generate-ssh-keys \
     --windows-admin-username azureuser \
     --windows-admin-password $WINDOWS_ADMIN_PASSWORD \
